@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#14111c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="KXD Office A">
+  <link rel="icon" href="kxd/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="kxd/icon-180.png">
+  <link rel="manifest" href="kxd/manifest.webmanifest">
+  <title>KXD Office A</title>
+  <link rel="stylesheet" href="kxd/app.css">
+</head>
+<body>
+  <!-- ============ Startseite ============ -->
+  <section id="start" class="ansicht">
+    <header class="kopf">
+      <div class="marke"><img src="kxd/icon.svg" alt=""><span>KXD Office <b>A</b></span></div>
+      <button class="knopf" id="oeffnen-knopf" title="Datei öffnen (Strg+O)">Datei öffnen</button>
+      <input type="file" id="datei" accept=".docx,.doc,.odt,.rtf,.txt,.xlsx,.xls,.ods,.csv,.pptx,.ppt,.odp,.pdf" hidden multiple>
+    </header>
+    <main>
+      <h2>Neu</h2>
+      <div class="neu">
+        <button data-neu="docx" class="kachel text"><span class="symbol">T</span><span>KXD Text</span><small>Leeres Dokument</small></button>
+        <button data-neu="xlsx" class="kachel tabelle"><span class="symbol">#</span><span>KXD Tabelle</span><small>Leere Tabelle</small></button>
+        <button data-neu="pptx" class="kachel folien"><span class="symbol">▶</span><span>KXD Folien</span><small>Leere Präsentation</small></button>
+      </div>
+      <div class="liste-kopf">
+        <h2>Zuletzt</h2>
+        <input type="search" id="suche" placeholder="Suchen">
+      </div>
+      <div id="liste" class="liste"></div>
+      <p id="leer" class="leer" hidden>Noch keine Dokumente. Lege oben ein neues an, öffne eine Datei oder zieh sie hier hinein.</p>
+    </main>
+  </section>
+
+  <!-- ============ Editor ============ -->
+  <section id="bearbeiten" class="ansicht" hidden>
+    <header class="ed-kopf">
+      <button class="knopf flach" id="zurueck" title="Zurück zur Übersicht">‹ Übersicht</button>
+      <input id="name" class="name" spellcheck="false" title="Dateiname">
+      <span id="status" class="status"></span>
+      <div class="rechts">
+        <button class="knopf flach" id="herunterladen" title="Als Office-Datei herunterladen">Herunterladen</button>
+        <button class="knopf flach" id="als-pdf" title="Als PDF herunterladen">PDF</button>
+      </div>
+    </header>
+    <iframe id="editor" title="Editor" allow="clipboard-read; clipboard-write"></iframe>
+  </section>
+
+  <div id="meldung" class="meldung" hidden></div>
+  <script src="kxd/speicher.js"></script>
+  <script src="kxd/app.js"></script>
+</body>
+</html>
