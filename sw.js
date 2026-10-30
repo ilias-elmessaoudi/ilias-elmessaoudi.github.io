@@ -520,6 +520,12 @@ async function withIsolationHeaders(response) {
   });
 }
 
+// KXD: nur eigene Pfade bedienen – andere Apps unter dieser Adresse (heft/, glas/, organizer/ …) nicht anfassen
+const KXD_EIGENE_PFADE = new Set(['', '.git', '.vite', '404', '404.html', 'LICENSE', 'NOTICE', 'README.md', '_headers', '_redirects', 'about', 'about.html', 'ai-document-assistant', 'ai-document-assistant.html', 'app-tokens.css', 'assets', 'build-identity.json', 'changelog', 'changelog.html', 'contact', 'contact.html', 'convert', 'de', 'document_editor_service_worker.js', 'edit-documents-without-account', 'edit-documents-without-account.html', 'editor', 'editor.html', 'embed-demo', 'embed-demo.html', 'embed-document-editor', 'embed-document-editor.html', 'es', 'fonts', 'help', 'help.html', 'history', 'history-recent.js', 'history.html', 'home.css', 'icons', 'index', 'index.html', 'ja', 'ko', 'kxd', 'landing-prefetch.js', 'landing.css', 'lang-switch.js', 'libs', 'licenses', 'llms-full.txt', 'llms.txt', 'manifest.json', 'no-signup-document-editor', 'no-signup-document-editor.html', 'offline-document-editor', 'offline-document-editor.html', 'onlyoffice-online-free', 'onlyoffice-online-free.html', 'open', 'open-local.js', 'plugins.json', 'private-document-editor', 'private-document-editor.html', 'pt', 'ran-fonts', 'ran-tokens.0588539a.css', 'ranui-iife', 'robots.txt', 'sdkjs', 'sitemap.xml', 'social', 'sw-register.js', 'sw.js', 'theme-presentation.js', 'themes.json', 'web-apps', 'webmcp-document-editor', 'webmcp-document-editor.html', 'zh-CN']);
+self.addEventListener('fetch', (event) => {
+  const u = new URL(event.request.url);
+  if (u.origin === self.location.origin && !KXD_EIGENE_PFADE.has(u.pathname.split('/')[1])) event.stopImmediatePropagation();
+});
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   const respondWith = (response) =>

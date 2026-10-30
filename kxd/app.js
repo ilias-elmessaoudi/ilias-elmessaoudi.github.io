@@ -192,5 +192,40 @@ document.addEventListener('drop', (e) => {
   if (!aktuell && e.dataTransfer.files.length) dateienAufnehmen([...e.dataTransfer.files]);
 });
 
+// ---------- Abgleich (Heft-Konto) ----------
+function wolkeZeigen(z) {
+  const w = $('#wolke');
+  w.classList.toggle('an', z.angemeldet && !z.fehler);
+  w.classList.toggle('fehler', !!z.fehler);
+  w.textContent = !z.angemeldet ? '☁ Anmelden' : z.fehler ? '☁ Fehler' : z.laeuft ? '☁ Gleicht ab…' : '☁ Abgeglichen';
+  w.title = z.fehler ? 'Abgleich fehlgeschlagen: ' + z.fehler : z.angemeldet ? 'Angemeldet als ' + z.email : 'Mit dem Heft-Konto anmelden';
+}
+addEventListener('kxd-abgleich', (e) => wolkeZeigen(e.detail));
+addEventListener('kxd-liste', () => { if (!aktuell) liste(); });
+addEventListener('kxd-fern', (e) => {
+  if (aktuell?.id === e.detail.id) meldung('Dieses Dokument wurde auf einem anderen Gerät geändert. Zur Übersicht und neu öffnen, um die neue Fassung zu sehen.', 8000);
+});
+$('#wolke').onclick = () => {
+  const z = Abgleich.zustand, d = $('#anmeldung');
+  $('#anmelde-fehler').hidden = true;
+  $('#anmelde-felder').hidden = z.angemeldet;
+  $('#anmelde-text').textContent = z.angemeldet
+    ? `Angemeldet als ${z.email}.` + (z.fehler ? ` Letzter Fehler: ${z.fehler}` : z.letzter ? ` Zuletzt abgeglichen: ${datum(z.letzter)}.` : '')
+    : 'Mit deinem Heft-Konto anmelden. Dann sind deine Dokumente auf PC, Laptop und iPad gleich.';
+  $('#anmelde-los').textContent = z.angemeldet ? 'Abmelden' : 'Anmelden';
+  d.showModal();
+};
+$('#anmelde-form').addEventListener('submit', async (e) => {
+  if (e.submitter?.value !== 'los') return;
+  e.preventDefault();
+  try {
+    if (Abgleich.zustand.angemeldet) { await Abgleich.abmelden(); meldung('Abgemeldet'); }
+    else { await Abgleich.anmelden($('#mail').value.trim(), $('#passwort').value); meldung('Angemeldet – Abgleich läuft'); }
+    $('#passwort').value = '';
+    $('#anmeldung').close();
+  } catch (err) { $('#anmelde-fehler').textContent = err.message; $('#anmelde-fehler').hidden = false; }
+});
+Abgleich.starten().catch((e) => console.warn('Abgleich nicht verfügbar', e));
+
 const start = location.hash.slice(1);
 start ? Speicher.holen(start).then((e) => (e ? bearbeiten(start) : liste())) : liste();

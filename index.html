@@ -18,6 +18,7 @@
   <section id="start" class="ansicht">
     <header class="kopf">
       <div class="marke"><img src="kxd/icon.svg" alt=""><span>KXD Office <b>A</b></span></div>
+      <button class="knopf wolke" id="wolke" title="Abgleich mit dem Heft-Konto">☁ Anmelden</button>
       <button class="knopf" id="oeffnen-knopf" title="Datei öffnen (Strg+O)">Datei öffnen</button>
       <input type="file" id="datei" accept=".docx,.doc,.odt,.rtf,.txt,.xlsx,.xls,.ods,.csv,.pptx,.ppt,.odp,.pdf" hidden multiple>
     </header>
@@ -51,8 +52,25 @@
     <iframe id="editor" title="Editor" allow="clipboard-read; clipboard-write"></iframe>
   </section>
 
+  <dialog id="anmeldung" class="anmeldung">
+    <form method="dialog" id="anmelde-form">
+      <h3>Abgleich zwischen Geräten</h3>
+      <p class="leise" id="anmelde-text">Mit deinem Heft-Konto anmelden. Dann sind deine Dokumente auf PC, Laptop und iPad gleich.</p>
+      <div id="anmelde-felder">
+        <input type="email" id="mail" placeholder="E-Mail" autocomplete="username">
+        <input type="password" id="passwort" placeholder="Passwort" autocomplete="current-password">
+      </div>
+      <p class="fehler" id="anmelde-fehler" hidden></p>
+      <div class="knoepfe">
+        <button value="abbrechen" class="knopf">Schließen</button>
+        <button id="anmelde-los" value="los" class="knopf voll">Anmelden</button>
+      </div>
+    </form>
+  </dialog>
   <div id="meldung" class="meldung" hidden></div>
+  <script src="kxd/vendor/supabase.min.js"></script>
   <script src="kxd/speicher.js"></script>
+  <script src="kxd/abgleich.js"></script>
   <script src="kxd/app.js"></script>
 </body>
 </html>
