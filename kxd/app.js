@@ -225,6 +225,8 @@ $('#anmelde-form').addEventListener('submit', async (e) => {
     $('#anmeldung').close();
   } catch (err) { $('#anmelde-fehler').textContent = err.message; $('#anmelde-fehler').hidden = false; }
 });
+// Offline-Speicher sicher anmelden (sw-register.js kuemmert sich zusaetzlich um Updates)
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch((e) => console.warn('Offline-Speicher', e)));
 Abgleich.starten().catch((e) => console.warn('Abgleich nicht verfügbar', e));
 
 const start = location.hash.slice(1);
